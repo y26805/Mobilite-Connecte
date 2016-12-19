@@ -3,8 +3,25 @@ import urllib.request
 import json
 import csv
 import traceback
+import time
 
 # Define functions
+
+def RateLimited(maxPerSecond):
+    minInterval = 1.0 / float(maxPerSecond)
+    def decorate(func):
+        lastTimeCalled = [0.0]
+        def rateLimitedFunction(*args,**kargs):
+            elapsed = time.clock() - lastTimeCalled[0]
+            leftToWait = minInterval - elapsed
+            if leftToWait>0:
+                time.sleep(leftToWait)
+            ret = func(*args,**kargs)
+            lastTimeCalled[0] = time.clock()
+            return ret
+        return rateLimitedFunction
+    return decorate
+
 def get_token():
 	token_url = 'https://api.lufthansa.com/v1/oauth/token'
 	client_id = 'qdjw9vsn48t9brhqhghvj724'
@@ -31,7 +48,7 @@ def get_token():
 		print("Token acquisition failed")
 		print(traceback.print_exc())
 
-
+@RateLimited(5)  # 5 per second at most
 def getResponse(url, token):
 	req = urllib.request.Request(url)
 	# set header
@@ -51,7 +68,7 @@ try:
 	count = 0
 	token = get_token()
 
-	for offset in range(0, 2200, 100):
+	for offset in range(0, 5000, 100):
 		rep = getResponse(setUrl(offset), token)
 		rep_json = json.loads(rep)
 
