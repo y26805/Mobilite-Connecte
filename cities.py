@@ -51,7 +51,7 @@ try:
 	count = 0
 	token = get_token()
 
-	for offset in range(0, 1300, 100):
+	for offset in range(0, 2200, 100):
 		rep = getResponse(setUrl(offset), token)
 		rep_json = json.loads(rep)
 
