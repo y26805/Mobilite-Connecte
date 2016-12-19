@@ -21,7 +21,7 @@ bdata = data.encode('utf8')
 
 try:
 	rep = urllib.request.urlopen(url=token_url, data=bdata)
-	
+
 	# Convert bytes to string type and string type to dict
 	string = rep.read().decode('utf8')
 	token_json = json.loads(string)
@@ -38,14 +38,12 @@ try:
 	offset = 0
 	count = 0;
 
-	for offset in range(0, 1300, 100):	
+	for offset in range(0, 1300, 100):
 
 		# set request url
-		# url1: flights from CDG to HKG scheduled on 31 dec 2016
 		# url2: list directory of airports
-		url1 = 'https://api.lufthansa.com/v1/operations/schedules/CDG/HKG/2016-12-31'
 		url2 = 'https://api.lufthansa.com/v1/references/airports?lang=EN&limit=100&offset=' + str(offset)
-	
+
 		# create request with url2
 		req = urllib.request.Request(url2)
 
@@ -62,15 +60,15 @@ try:
 
 		print("Airport count", count)
 
-		# export as CSV 
+		# export as CSV
 		# if start of export
 		if offset == 0:
 			f = csv.writer(open(csvname, "w"))
 			# write CSV headers
 			f.writerow([
-				'airport_code', 
-				'airport_name', 
-				'city_code', 
+				'airport_code',
+				'airport_name',
+				'city_code',
 				'country_code',
 				'latitude',
 				'longitude',
@@ -106,10 +104,9 @@ try:
 					airport['LocationType']
 					])
 
-	
+
 	print('Export successful')
 
 except:
 	print("Request failed")
 	print(traceback.print_exc())
-
