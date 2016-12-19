@@ -1,5 +1,4 @@
 # import libraries
-# documentation for urllib: https://docs.python.org/3.5/library/urllib.request.html
 import urllib.request
 import json
 import csv
@@ -44,42 +43,47 @@ def getResponse(url, token):
 
 	return rep
 
-def setUrl_schedule(month, day):
-	date = '2016-' + str(month) + '-' + str(day)
-	url = 'https://api.lufthansa.com/v1/operations/schedules/FRA/ZRH/' + date
+def setUrl(offset):
+	url = 'https://api.lufthansa.com/v1/references/cities?limit=100&offset=' + str(offset) + "&lang=EN"
 	return url
 
 try:
 	count = 0
 	token = get_token()
 
-	for day in range(24,31):
-		rep = getResponse(setUrl_schedule(12,day), token)
+	for offset in range(0, 1300, 100):
+		rep = getResponse(setUrl(offset), token)
 		rep_json = json.loads(rep)
 
 		# export as CSV
 		# if start of export
-		if day == 24:
-			f = csv.writer(open("schedule_dir_v3.csv", "w"))
+		if offset == 0:
+			f = csv.writer(open("cities.csv", "w"))
 			# write CSV headers
-			f.writerow(['count', 'dep1', 'arr1', 'dep2','arr2'])
+			f.writerow(['cityCode', 'countryCode', 'name', 'lat','lon'])
 		else:
-			f = csv.writer(open("schedule_dir_v3.csv", "a"))
+			f = csv.writer(open("cities.csv", "a"))
 
-		for flight in rep_json['ScheduleResource']['Schedule']:
+		for city in rep_json['CityResource']['Cities']['City']:
 				count = count + 1
-				if len(flight['Flight']) != 2:
-					f.writerow([count,
-						flight['Flight']['Departure']['AirportCode'],
-						flight['Flight']['Arrival']['AirportCode']])
+				if 'Position' not in city:
+					f.writerow([
+							city['CityCode'],
+							city['CountryCode'],
+							city['Names']['Name']['$'],
+							None,
+							None
+							])
 				else:
-					f.writerow([count,
-						flight['Flight'][0]['Departure']['AirportCode'],
-						flight['Flight'][0]['Arrival']['AirportCode'],
-						flight['Flight'][1]['Departure']['AirportCode'],
-						flight['Flight'][1]['Arrival']['AirportCode']])
+					f.writerow([
+							city['CityCode'],
+							city['CountryCode'],
+							city['Names']['Name']['$'],
+							city['Position']['Coordinate']['Latitude'],
+							city['Position']['Coordinate']['Longitude']
+							])
 
-		print('Finished export for day' + str(day))
+		print('Finished export for ' + str(count) + 'th cities')
 
 except:
 	print("Request failed")
