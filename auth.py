@@ -1,4 +1,5 @@
 import urllib.request
+import urllib.error
 import json
 import traceback
 import time
@@ -59,3 +60,19 @@ def getResponse(url, token):
 	rep = urllib.request.urlopen(req).read().decode('utf8')
 
 	return rep
+
+def getCode(url, token):
+    req = urllib.request.Request(url)
+    # set header
+    req.add_header('Authorization','Bearer ' + token)
+    # choose to receive in JSON
+    req.add_header('Accept','application/json')
+
+    try:
+        http_code = urllib.request.urlopen(req).getcode()
+    except urllib.error.HTTPError as e:
+        return e.code
+    except urllib.error.URLError as e:
+        return e.code
+    else:
+        return http_code
