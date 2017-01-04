@@ -16,12 +16,13 @@ try:
 	token = auth.get_token()
 
 	exportcsv = 'directFlightPairs.csv'
+	importcsv = 'EUplus.csv'
 
 	# Write csv headers
 	f = csv.writer(open(exportcsv, "w"))
 	f.writerow(['origin', 'des', 'httpcode'])
 
-	with open('Eairports.csv') as csvfile:
+	with open(importcsv) as csvfile:
 		reader = csv.DictReader(csvfile)
 		lst = list()
 		for row in reader:
