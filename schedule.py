@@ -12,8 +12,19 @@ def setUrl_schedule(origin, destination, month, day):
 	url = 'https://api.lufthansa.com/v1/operations/schedules/' + origin + '/' + destination + '/' + date + '?directFlights=true'
 	return url
 
+# Choose alphabets range, if needed. Range is inclusive of starChar and endChar
+def setRange(startChar, endChar):
+	charString = string.ascii_uppercase[:]
+
+	startIdx = charString.index(startChar)
+	endIdx = charString.index(endChar)
+
+	rangeChar = charString[startIdx : int(endIdx) + 1]
+	rangeList = list(rangeChar)
+
+	return rangeList
+
 try:
-	count = 0
 	token = auth.get_token()
 
 	exportcsv = 'directFlightPairs.csv'
@@ -33,23 +44,12 @@ try:
 	originList = lst
 	desList = lst
 
-	# Choose alphabets range, if needed
-	startChar = 'I'
-	endChar = 'M'
-	charString = string.ascii_uppercase[:]
-
-	startIdx = charString.index(startChar)
-	endIdx = charString.index(endChar)
-
-	rangeChar = charString[startIdx : int(endIdx) + 1]
-	rangeList = list(rangeChar)
-	print (rangeList)
 
 	# Make requests for all possible pairs of European airports
 	for o_item in originList:
 		origin = o_item
 
-		for char in rangeList:
+		for char in setRange('I', 'J'):
 			if not origin.startswith(char):
 				continue
 
