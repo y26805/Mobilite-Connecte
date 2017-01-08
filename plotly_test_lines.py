@@ -3,7 +3,7 @@ import plotly.plotly as py
 import plotly.graph_objs as go
 import pandas as pd
 
-df_airports = pd.read_csv('airport_clean.csv')
+df_airports = pd.read_csv('EUairports.csv')
 df_airports.head()
 
 df_flight_paths = pd.read_csv('flights_EU_0120.csv')
@@ -11,13 +11,14 @@ df_flight_paths.head()
 
 airports = [ dict(
 	type = 'scattergeo',
-	lat = df_airports['latitude'],
-	lon = df_airports['longitude'],
+	lat = df_airports['lat'],
+	lon = df_airports['lon'],
 	hoverinfo = 'text',
-	text = df_airports['airport_name'],
+	text = df_airports['airportName'],
 	mode = 'markers',
 	marker = dict(
 		size = 1,
+		color = 'rgb(255,0,0)',
 		opacity = 0.8,
 		line = dict(
 			width = 3,
@@ -43,7 +44,11 @@ for i in range( len( df_flight_paths ) ):
     )
 
 layout = dict(
-	title = '<b>European connections</b><br>(Hover for airport code)<br>Source:<a href="https://developer.lufthansa.com/page">Lufthansa API</a>',
+	autosize = False,
+	width = 1400,
+	height = 800,
+	showlegend = False,
+	title = '<b>European connections</b><br>(Hover for airport name)<br>Source:<a href="https://developer.lufthansa.com/page">Lufthansa API</a>',
 	geo = dict(
 		projection=dict( type='mercator'),
 		scope = 'europe',
