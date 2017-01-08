@@ -27,7 +27,10 @@ def setRange(startChar, endChar):
 try:
 	token = auth.get_token()
 
-	exportcsv = 'directFlightPairs.csv'
+	month = '01'
+	date = '24'
+
+	exportcsv = 'directFlightPairs_' + month + '_' + date + '.csv'
 	importcsv = 'EUplus.csv'
 
 	# # Write csv headers
@@ -49,14 +52,14 @@ try:
 	for o_item in originList:
 		origin = o_item
 
-		for char in setRange('I', 'J'):
+		for char in setRange('A', 'A'):
 			if not origin.startswith(char):
 				continue
 
 			for d_item in desList:
 				destination = d_item
 
-				code = auth.getCode(setUrl_schedule(origin, destination, '01', '20'), token);
+				code = auth.getCode(setUrl_schedule(origin, destination, month, date), token);
 
 				f = csv.writer(open(exportcsv, "a"))
 				f.writerow([o_item, d_item, code])
