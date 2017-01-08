@@ -3,6 +3,7 @@ import urllib.request
 import json
 import csv
 import traceback
+import string
 
 import auth
 
@@ -11,16 +12,27 @@ def setUrl_schedule(origin, destination, month, day):
 	url = 'https://api.lufthansa.com/v1/operations/schedules/' + origin + '/' + destination + '/' + date + '?directFlights=true'
 	return url
 
+# Choose alphabets range, if needed. Range is inclusive of starChar and endChar
+def setRange(startChar, endChar):
+	charString = string.ascii_uppercase[:]
+
+	startIdx = charString.index(startChar)
+	endIdx = charString.index(endChar)
+
+	rangeChar = charString[startIdx : int(endIdx) + 1]
+	rangeList = list(rangeChar)
+
+	return rangeList
+
 try:
-	count = 0
 	token = auth.get_token()
 
 	exportcsv = 'directFlightPairs.csv'
 	importcsv = 'EUplus.csv'
 
-	# Write csv headers
-	f = csv.writer(open(exportcsv, "w"))
-	f.writerow(['origin', 'des', 'httpcode'])
+	# # Write csv headers
+	# f = csv.writer(open(exportcsv, "w"))
+	# f.writerow(['origin', 'des', 'httpcode'])
 
 	with open(importcsv) as csvfile:
 		reader = csv.DictReader(csvfile)
@@ -32,45 +44,26 @@ try:
 	originList = lst
 	desList = lst
 
+
 	# Make requests for all possible pairs of European airports
 	for o_item in originList:
 		origin = o_item
 
-		for d_item in desList:
-			destination = d_item
+		for char in setRange('I', 'J'):
+			if not origin.startswith(char):
+				continue
 
-			code = auth.getCode(setUrl_schedule(origin, destination, '01', '20'), token);
+			for d_item in desList:
+				destination = d_item
 
-			f = csv.writer(open(exportcsv, "a"))
-			f.writerow([o_item, d_item, code])
+				code = auth.getCode(setUrl_schedule(origin, destination, '01', '20'), token);
 
-	# for day in range(24,32):
-	# rep = auth.getResponse(setUrl_schedule(origin, destination, '01', '20'), token);
-	# rep_json = json.loads(rep)
-	#
-	# 	# export as CSV
-	# 	# if start of export
-	# 	if day == 24:
-	# 		f = csv.writer(open("schedule_dir_v3.csv", "w"))
-	# 		# write CSV headers
-	# 		f.writerow(['count', 'dep1', 'arr1', 'dep2','arr2'])
-	# 	else:
-	# 		f = csv.writer(open("schedule_dir_v3.csv", "a"))
-	#
-	# 	for flight in rep_json['ScheduleResource']['Schedule']:
-	# 			count = count + 1
-	# 			if len(flight['Flight']) != 2:
-	# 				f.writerow([count,
-	# 					flight['Flight']['Departure']['AirportCode'],
-	# 					flight['Flight']['Arrival']['AirportCode']])
-	# 			else:
-	# 				f.writerow([count,
-	# 					flight['Flight'][0]['Departure']['AirportCode'],
-	# 					flight['Flight'][0]['Arrival']['AirportCode'],
-	# 					flight['Flight'][1]['Departure']['AirportCode'],
-	# 					flight['Flight'][1]['Arrival']['AirportCode']])
-		#
-		# print('Finished export for day ' + str(day))
+				f = csv.writer(open(exportcsv, "a"))
+				f.writerow([o_item, d_item, code])
+
+			print ('Export for flights from ' + origin + ' complete')
+
+	print ('***Export done')
 
 except:
 	print("Request failed")
