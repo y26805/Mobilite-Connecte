@@ -44,13 +44,16 @@ for i in range( len( df_flight_paths ) ):
     )
 
 layout = dict(
+	font = dict(
+		family = 'Arial',
+	),
 	autosize = False,
 	width = 1400,
 	height = 800,
 	showlegend = False,
 	title = '<b>European connections</b><br>(Hover for airport name)<br>Source:<a href="https://developer.lufthansa.com/page">Lufthansa API</a>',
 	geo = dict(
-		projection=dict( type='mercator'),
+		projection = dict( type='azimuthal equal area', scale = 3,),
 		scope = 'europe',
 		showland = True,
 		showcountries = True,
