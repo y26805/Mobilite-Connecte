@@ -56,7 +56,7 @@ def insertData(tablename, filename,):
 # for row in cur.execute("SELECT airportName FROM airports WHERE countryCode='DE'"):
 # 	print(row)
 
-filename = 'directFlightPairs_01_24.csv'
+filename = 'directFlightPairs_01_26.csv'
 tablename = 'flights'
 
 with open(filename, "rt", encoding='utf8') as file:
@@ -65,7 +65,7 @@ with open(filename, "rt", encoding='utf8') as file:
 	row['des'],
 	row['httpcode']) for row in dr]
 	# insert each row
-	cur.executemany("INSERT INTO " + tablename + " VALUES (?, ?, ?, '2017-01-24');", to_db)
+	cur.executemany("INSERT INTO " + tablename + " VALUES (?, ?, ?, '2017-01-26');", to_db)
 
 conn.commit()
 conn.close()
