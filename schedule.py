@@ -25,14 +25,14 @@ def setRange(startChar, endChar):
 	return rangeList
 
 def setInputDate():
-	month = input('Enter month')
-	date = input('Enter date')
+	month = input('Enter month (e.g. 01): ')
+	date = input('Enter date (e.g. 10): ')
 
 	return month, date
 
 def setInputRange():
-	startChar = input('Enter starting alphabet')
-	endChar = input('Enter finishing alphabet')
+	startChar = input('Enter starting alphabet: ')
+	endChar = input('Enter finishing alphabet: ')
 
 	print('Programme will run from ' + startChar + ' to ' + endChar)
 
