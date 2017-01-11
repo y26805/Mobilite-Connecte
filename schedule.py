@@ -24,11 +24,25 @@ def setRange(startChar, endChar):
 
 	return rangeList
 
+def setInputDate():
+	month = input('Enter month')
+	date = input('Enter date')
+
+	return month, date
+
+def setInputRange():
+	startChar = input('Enter starting alphabet')
+	endChar = input('Enter finishing alphabet')
+
+	print('Programme will run from ' + startChar + ' to ' + endChar)
+
+	return startChar, endChar
+
 try:
 	token = auth.get_token()
 
-	month = '01'
-	date = '24'
+	month, date = setInputDate()
+	startChar, endChar = setInputRange()
 
 	exportcsv = 'directFlightPairs_' + month + '_' + date + '.csv'
 	importcsv = 'EUplus.csv'
@@ -52,7 +66,7 @@ try:
 	for o_item in originList:
 		origin = o_item
 
-		for char in setRange('A', 'A'):
+		for char in setRange(startChar, endChar):
 			if not origin.startswith(char):
 				continue
 
