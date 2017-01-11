@@ -40,22 +40,23 @@ def insertData(tablename, filename,):
 			# insert each row
 			cur.executemany("INSERT INTO " + tablename + " VALUES (?, ?, ?);", to_db)
 
-# Create table for airports
-createTable("airports", "airports (airportCode, airportName, cityCode, countryCode, lat, lon);")
-insertData("airports", "airport_clean.csv")
+# # Create table for airports
+# createTable("airports", "airports (airportCode, airportName, cityCode, countryCode, lat, lon);")
+# insertData("airports", "airport_clean.csv")
+#
+# # # Create table for cities
+# createTable("cities", "cities (cityCode, countryCode, cityName, lat, lon);")
+# insertData("cities", "cities.csv")
+#
+# # Create table for countries
+# createTable("countries", "countries (countryCode, zoneCode, name);")
+# insertData("countries", "countries.csv")
 
-# # Create table for cities
-createTable("cities", "cities (cityCode, countryCode, cityName, lat, lon);")
-insertData("cities", "cities.csv")
-
-# Create table for countries
-createTable("countries", "countries (countryCode, zoneCode, name);")
-insertData("countries", "countries.csv")
+# # Print
+# for row in cur.execute("SELECT airportName FROM airports WHERE countryCode='DE'"):
+# 	print(row)
 
 
-# Print
-for row in cur.execute("SELECT airportName FROM airports WHERE countryCode='DE'"):
-	print(row)
 
 conn.commit()
 conn.close()
