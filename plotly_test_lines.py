@@ -53,7 +53,7 @@ layout = dict(
 	showlegend = False,
 	title = '<b>European connections</b><br>(Hover for airport name)<br>Source:<a href="https://developer.lufthansa.com/page">Lufthansa API</a>',
 	geo = dict(
-		projection = dict( type='azimuthal equal area', scale = 3,),
+		projection = dict( type='mercator', scale = 3,),
 		scope = 'europe',
 		showland = True,
 		showcountries = True,
