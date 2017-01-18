@@ -7,7 +7,7 @@ df = pd.read_csv('airport_clean.csv')
 df.head()
 
 # Create text as explanation when mouse over.
-df['text'] = df['airport_name'] + '\n' + df['airport_code'] 
+df['text'] = df['airport_name'] + '\n' + df['airport_code']
 
 data = [ dict(
 	type = 'scattergeo',
@@ -37,4 +37,3 @@ layout = dict(
 
 
 plotly.offline.plot({"data":data, "layout":layout})
-
