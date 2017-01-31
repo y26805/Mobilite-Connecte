@@ -5,7 +5,7 @@
 
   .links line {
     stroke: #999;
-    stroke-opacity: 0.6;
+    stroke-opacity: 0.2;
   }
 
   .nodes circle {
@@ -23,9 +23,9 @@
 <body>
   <h1>The Lufthansa network in Europe</h1>
   <div id="tooltip">
-    <p><strong id="name">blahblah</strong></p>
-    <p>Aiport Code: <span id="code">test</span></p>
-    <p>Average no. of destinations: <span id="num">num</span></p>
+    <p><strong id="name">Loading...</strong></p>
+    <p>Aiport Code: <span id="code"></span></p>
+    <p>Average no. of destinations: <span id="num"></span></p>
 
   </div>
 
@@ -37,17 +37,21 @@
   width = +svg.attr("width"),
   height = +svg.attr("height");
 
-  var color = d3.scaleOrdinal(d3.schemeCategory20);
+  var color = d3.scaleOrdinal(d3.schemeCategory20c);
+
+  var focalNodeId = "FRA";
 
   var simulation = d3.forceSimulation()
-  .force("link", d3.forceLink().id(function(d) { return d.id; }))
-  .force("charge", d3.forceManyBody())
+  .force("link", d3.forceLink().distance(150).strength(0.5).id(function(d) { return d.id; }))
+  .force("charge", d3.forceManyBody().strength(-3))
   .force("center", d3.forceCenter(width / 2, height / 2));
 
   d3.json("spider2.json", function(error, graph) {
     if (error) throw error;
 
-    console.log(graph);
+    graph.nodes[0].fx = width / 2;
+    graph.nodes[0].fy = height / 2;
+    graph.nodes[0].fixed = true;
 
     var link = svg.append("g")
     .attr("class", "links")
@@ -61,8 +65,15 @@
     .selectAll("circle")
     .data(graph.nodes)
     .enter().append("circle")
-    .attr("r", 5)
+    .attr("r", function(d){
+      if(d.id == focalNodeId) { return 15;}
+      return (6 - d.group) * 1.3;
+    })
     .attr("fill", function(d) { return color(d.group); })
+    .attr("fixed", function(d) {
+      if(d.id == focalNodeId) { return true;}
+      return false;
+    })
     .call(d3.drag()
     .on("start", dragstarted)
     .on("drag", dragged)
@@ -80,7 +91,9 @@
 
       d3.select("#tooltip")
       .select("#num")
-      .text(d.num / 7);
+      .text(Math.floor(d.num / 7));
+
+      highlight_node(this);
 
     });
 
@@ -108,6 +121,9 @@
   });
 
   function dragstarted(d) {
+
+    d3.select(this).classed("fixed", d.fixed = true);
+
     if (!d3.event.active) simulation.alphaTarget(0.3).restart();
     d.fx = d.x;
     d.fy = d.y;
@@ -120,9 +136,18 @@
 
   function dragended(d) {
     if (!d3.event.active) simulation.alphaTarget(0);
-    d.fx = null;
-    d.fy = null;
+    // d.fx = null;
+    // d.fy = null;
+    d.fx = d.x;
+    d.fy = d.y;
   }
+
+  function highlight_node(node)
+	{
+	    d3.selectAll("circle").style("stroke","#fff").style("stroke-width",'1.5px');
+	    d3.select(node).style("stroke", "red").style("stroke-width",'2px').classed('highlit');
+
+	}
 
   </script>
 </body>
