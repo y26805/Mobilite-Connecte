@@ -14,9 +14,23 @@
   }
 
   </style>
-  <svg width="1000" height="600"></svg>
+
   <link rel="stylesheet" type="text/css" href="style.css"/>
   <script src="https://d3js.org/d3.v4.min.js"></script>
+
+</head>
+
+<body>
+  <h1>The Lufthansa network in Europe</h1>
+  <div id="tooltip">
+    <p><strong id="name">blahblah</strong></p>
+    <p>Aiport Code: <span id="code">test</span></p>
+    <p>Average no. of destinations: <span id="num">num</span></p>
+
+  </div>
+
+  <svg width="1000" height="600"></svg>
+
   <script>
 
   var svg = d3.select("svg"),
@@ -111,13 +125,4 @@
   }
 
   </script>
-</head>
-
-<body>
-  <h1>The Lufthansa network in Europe</h1>
-  <div id="tooltip">
-    <p><strong id="name">blahblah</strong></p>
-    <p>Aiport Code: <span id="code">test</span></p>
-    <p>Average no. of destinations: <span id="num">num</span></p>
-  </div>
 </body>
