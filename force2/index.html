@@ -93,6 +93,19 @@
       .select("#num")
       .text(Math.floor(d.num / 7));
 
+      link.style('stroke', function(l){
+        if (d === l.source || d === l.target)
+          return "red";
+        else
+          return "gray";
+      })
+      .style('stroke-width', function(l){
+        if (d === l.source || d === l.target)
+          return 1.5;
+        else
+          return 1;
+      });
+
       highlight_node(this);
 
     });
