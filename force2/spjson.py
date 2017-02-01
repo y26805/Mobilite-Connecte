@@ -23,8 +23,7 @@ nodes = []
 count = 1
 r1 = range(0,51)
 r2 = range(51,101)
-r3 = range(101,151)
-r4 = range(151,300)
+r3 = range(101,300)
 
 for row in rows:
     count = count + 1
@@ -35,8 +34,6 @@ for row in rows:
         rank = 1
     if count in r3:
         rank = 2
-    if count in r4:
-        rank = 3
     obj = {
         'id' : row[0],
         'num' : row[1],
