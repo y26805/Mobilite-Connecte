@@ -8,7 +8,7 @@ AND F2.des NOT IN (
 SELECT des
 FROM FRA_D1
 )
-AND F1.des = F2.origin 
+AND F1.des = F2.origin
 AND F2.des != 'FRA'
 AND F1.origin = 'FRA'
 AND F1.httpcode = '200'
